@@ -9,7 +9,7 @@ Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
 
-class TioEliasStatus(Base):
+class TioEliasStatusChange(Base):
     datetime = Column(Datetime, primary_key=True)
     status = Column(Integer, nullable=False)
 
