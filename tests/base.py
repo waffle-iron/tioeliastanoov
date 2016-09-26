@@ -8,11 +8,11 @@ class BaseTestCase(TestCase):
     render_templates = False
 
     def create_app(self):
+        app.config['TESTING'] = True
         return app
 
     def setUp(self):
         Base.metadata.create_all()
-        self.app = app.test_client()
 
     def tearDown(self):
         Base.metadata.drop_all()

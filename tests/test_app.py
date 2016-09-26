@@ -1,3 +1,4 @@
+from flask import url_for
 from alchemytools.context import managed
 
 from tioeliastanoov.persistence import (change_status, get_latest_status,
@@ -9,20 +10,20 @@ from tests.base import BaseTestCase
 
 class TestPOST(BaseTestCase):
     def test_invalid_status(self):
-        self.assertEqual(self.app.post('/').status_code, 400)
+        self.assertEqual(self.client.post('/').status_code, 400)
 
-        r = self.app.post('/', data={'blargh': 6})
+        r = self.client.post('/', data={'blargh': 6})
         self.assertEqual(r.status_code, 400)
 
-        r = self.app.post('/', data={'status': 6})
+        r = self.client.post('/', data={'status': 6})
         self.assertEqual(r.status_code, 400)
 
-        r = self.app.post('/', data={'status': 'asdf'})
+        r = self.client.post('/', data={'status': 'asdf'})
         self.assertEqual(r.status_code, 400)
 
     def test_change_status(self):
         status1 = TioEliasStatus.unavailable.value
-        r = self.app.post('/', data={'status': status1})
+        r = self.client.post('/', data={'status': status1})
         self.assertEqual(r.status_code, 200)
 
         with managed(Session) as s:
@@ -33,7 +34,7 @@ class TestPOST(BaseTestCase):
             self.assertEqual(last_statuses[0].status, status1)
 
         status2 = TioEliasStatus.available.value
-        r = self.app.post('/', data={'status': status2})
+        r = self.client.post('/', data={'status': status2})
         self.assertEqual(r.status_code, 200)
 
         with managed(Session) as s:
@@ -51,7 +52,7 @@ class TestGET(BaseTestCase):
         with managed(Session) as s:
             change_status(s, status)
 
-        r = self.app.get('/')
+        r = self.client.get('/')
         with managed(Session) as s:
             self.assertEqual(r.status_code, 200)
             self.assertEqual(self.get_context_variable('status'), status)
