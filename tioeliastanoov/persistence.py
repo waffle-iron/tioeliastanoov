@@ -9,7 +9,7 @@ from tioeliastanoov.constants import TioEliasStatus
 from tioeliastanoov.exceptions import InvalidStatusError
 
 
-engine = create_engine('sqlite:///:memory:')
+engine = create_engine('sqlite:///db.sqlite')
 Base = declarative_base(bind=engine)
 Session = sessionmaker(bind=engine)
 
