@@ -1,5 +1,4 @@
 from datetime import datetime
-from unittest import TestCase, main
 
 from alchemytools.context import managed
 from freezegun import freeze_time
@@ -9,8 +8,10 @@ from tioeliastanoov.persistence import (Base, change_status, Session,
                                         TioEliasStatusChange)
 from tioeliastanoov.constants import TioEliasStatus
 
+from tests.base import BaseTestCase
 
-class TestChangeStatus(TestCase):
+
+class TestChangeStatus(BaseTestCase):
     def setUp(self):
         Base.metadata.create_all()
 
