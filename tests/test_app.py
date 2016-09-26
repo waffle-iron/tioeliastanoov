@@ -1,6 +1,7 @@
 from alchemytools.context import managed
 
-from tioeliastanoov.persistence import Session, TioEliasStatusChange
+from tioeliastanoov.persistence import (change_status, get_latest_status,
+                                        Session, TioEliasStatusChange)
 from tioeliastanoov.constants import TioEliasStatus
 
 from tests.base import BaseTestCase
@@ -42,4 +43,19 @@ class TestPOST(BaseTestCase):
             self.assertEqual(len(last_statuses), 2)
             self.assertEqual(last_statuses[0].status, status1)
             self.assertEqual(last_statuses[1].status, status2)
+
+
+class TestGET(BaseTestCase):
+    def test_get(self):
+        status = TioEliasStatus.available.value
+        with managed(Session) as s:
+            change_status(s, status)
+
+        r = self.app.get('/')
+        with managed(Session) as s:
+            self.assertEqual(r.status_code, 200)
+            self.assertEqual(self.get_context_variable('status'), status)
+            self.assertEqual(self.get_context_variable('latest_update'),
+                             get_latest_status(s).datetime)
+            self.assert_template_used('index.html')
 
