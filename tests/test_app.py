@@ -13,16 +13,15 @@ class TestPOST(BaseTestCase):
         r = self.app.post('/', data={'blargh': 6})
         self.assertEqual(r.status_code, 400)
 
-        r = self.app.post('/', data={'new_status': 6})
+        r = self.app.post('/', data={'status': 6})
         self.assertEqual(r.status_code, 400)
 
-        r = self.app.post('/', data={'new_status': 'asdf'})
+        r = self.app.post('/', data={'status': 'asdf'})
         self.assertEqual(r.status_code, 400)
 
     def test_change_status(self):
         status1 = TioEliasStatus.unavailable.value
-        data = {'new_status': status1}
-        r = self.app.post('/', data=data)
+        r = self.app.post('/', data={'status': status1})
         self.assertEqual(r.status_code, 200)
 
         with managed(Session) as s:
@@ -33,8 +32,7 @@ class TestPOST(BaseTestCase):
             self.assertEqual(last_statuses[0].status, status1)
 
         status2 = TioEliasStatus.available.value
-        data = {'new_status': status2}
-        r = self.app.post('/', data=data)
+        r = self.app.post('/', data={'status': status2})
         self.assertEqual(r.status_code, 200)
 
         with managed(Session) as s:

@@ -12,7 +12,7 @@ app = Flask('tioelias')
 def post(request):
     try:
         with managed(Session) as s:
-            change_status(s, int(request.form['new_status']))
+            change_status(s, int(request.form['status']))
     except (InvalidStatusError, ValueError, KeyError):
         return '', 400
     return '', 200
