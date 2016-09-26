@@ -24,7 +24,7 @@ class TestPOST(BaseTestCase):
     def test_change_status(self):
         status1 = TioEliasStatus.unavailable.value
         r = self.client.post('/', data={'status': status1})
-        self.assertEqual(r.status_code, 200)
+        self.assert_redirects(r, url_for('index'))
 
         with managed(Session) as s:
             last_statuses = (s.query(TioEliasStatusChange)
@@ -35,7 +35,7 @@ class TestPOST(BaseTestCase):
 
         status2 = TioEliasStatus.available.value
         r = self.client.post('/', data={'status': status2})
-        self.assertEqual(r.status_code, 200)
+        self.assert_redirects(r, url_for('index'))
 
         with managed(Session) as s:
             last_statuses = (s.query(TioEliasStatusChange)

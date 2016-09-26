@@ -1,4 +1,5 @@
-from flask import Flask, make_response, render_template, request
+from flask import (Flask, make_response, redirect, render_template, request,
+                   url_for)
 
 from alchemytools.context import managed
 
@@ -38,11 +39,11 @@ def post(request):
             change_status(s, int(request.form['status']))
     except (InvalidStatusError, ValueError, KeyError):
         return '', 400
-    return '', 200
+    return redirect(url_for('index'))
 
 
 @app.route('/', methods=['GET', 'POST'])
-def home():
+def index():
     if request.method == 'GET':
         return get(request)
     else:
