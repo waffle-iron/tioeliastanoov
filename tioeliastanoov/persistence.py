@@ -20,6 +20,13 @@ class TioEliasStatusChange(Base):
     status = Column(Integer, nullable=False)
 
 
+def get_latest_status(session):
+    return (session
+            .query(TioEliasStatusChange)
+            .order_by(TioEliasStatusChange.datetime.desc())
+            .first())
+
+
 def change_status(session, new_status):
     try:
         TioEliasStatus(new_status)
