@@ -19,6 +19,9 @@ class TioEliasStatusChange(Base):
     datetime = Column(DateTime, primary_key=True)
     status = Column(Integer, nullable=False)
 
+    def to_status(self):
+        return TioEliasStatus(self.status)
+
 
 def get_latest_status(session):
     return (session

@@ -48,14 +48,15 @@ class TestPOST(BaseTestCase):
 
 class TestGET(BaseTestCase):
     def test_get(self):
-        status = TioEliasStatus.available.value
+        status = TioEliasStatus.available
         with managed(Session) as s:
-            change_status(s, status)
+            change_status(s, status.value)
 
         r = self.client.get('/')
         with managed(Session) as s:
             self.assertEqual(r.status_code, 200)
-            self.assertEqual(self.get_context_variable('status'), status)
+            self.assertEqual(self.get_context_variable('status'),
+                             status.to_message())
             self.assertEqual(self.get_context_variable('latest_update'),
                              get_latest_status(s).datetime)
             self.assert_template_used('index.html')

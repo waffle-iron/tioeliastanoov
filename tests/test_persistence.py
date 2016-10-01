@@ -58,3 +58,11 @@ class TestGetLastStatus(BaseTestCase):
 
         with managed(Session) as s:
             self.assertEqual(get_latest_status(s).datetime, latest_dt)
+
+
+class TestTioEliasStatusChange(BaseTestCase):
+    def test_to_status(self):
+        for status in TioEliasStatus:
+            status_change = TioEliasStatusChange(status=status)
+            self.assertEqual(status_change.to_status(), status)
+
